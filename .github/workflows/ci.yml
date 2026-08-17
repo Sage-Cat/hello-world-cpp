@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build with warnings enabled
+        run: g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror hello.cpp -o hello
+      - name: Verify output
+        run: test "$(./hello)" = "Hello, World!"
